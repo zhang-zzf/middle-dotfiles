@@ -9,6 +9,7 @@ TMP_DIR="/tmp/"
 ports=(6470 6471 6472 6473)
 
 _start() {
+    host=${1}
     for port in ${ports[@]}; do
         dir="${TMP_DIR}/${port}/"
         if [ ! -d "${dir}" ]; then
@@ -18,13 +19,15 @@ _start() {
         if [ "${port}" = "${ports[0]}" ]; then
             cd ${dir} && ${REDIS_SERVER} ${dir}/redis.conf \
                 --dir "${dir}" \
+                --bind "0.0.0.0" \
                 --port "${port}" \
                 --pidfile "${dir}/redis.pid"
         else
             cd ${dir} && ${REDIS_SERVER} ${dir}/redis.conf \
                 --dir "${dir}" \
+                --bind "0.0.0.0" \
                 --port "${port}" \
-                --slaveof 127.0.0.1 ${ports[0]} \
+                --slaveof ${host} ${ports[0]} \
                 --pidfile "${dir}/redis.pid"
         fi
     done
@@ -38,7 +41,10 @@ _stop() {
 
 case "$1" in
 start)
-    shift;_start
+    shift
+    host=${1}
+    host=${host:=127.0.0.1}
+    _start ${host}
     echo "redis database started"
 ;;
 stop)

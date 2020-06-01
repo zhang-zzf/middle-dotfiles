@@ -16,3 +16,5 @@ standard-alone mode @6379
 ## sentinel
 
 5 sentinel nodes at @27700 @27701 ... @27704
+
+> must change sentinel/sentinel.conf before you start then sentinel nodes on your own machine.
