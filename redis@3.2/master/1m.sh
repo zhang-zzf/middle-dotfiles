@@ -18,23 +18,27 @@ _start() {
             --dir "${dir}" \
             --port "${port}" \
             --pidfile "${dir}/redis.pid"
+        echo "redis database @${port} started"
     done
 }
 
 _stop() {
     for port in ${ports[@]}; do
         kill `cat ${TMP_DIR}/${port}/redis.pid`
+        echo "redis database @${port} stopped"
     done
 }
 
 case "$1" in
 start)
-    shift;_start
-    echo "redis database started"
+    shift;
+    ports=($@)
+    _start
 ;;
 stop)
+    shift;
+    ports=($@)
     _stop
-    echo "redis database stopped"
 ;;
 restart)
     _stop && _start
