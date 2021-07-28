@@ -41,6 +41,8 @@ stop)
     _stop
 ;;
 restart)
+    shift;
+    ports=($@)
     _stop && _start
 ;;
 *)
