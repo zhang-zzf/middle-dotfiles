@@ -22,8 +22,7 @@ while :;do
     username=${username:-admin}
     # scp bin to remote node
     scp -r redis_7.0.5_64 ${username}@${ip}:
-    ssh ${username}@${ip} "pkill redis-server; \
-        sleep 3s; \
+    ssh ${username}@${ip} "pkill -9 redis-server && sleep 5s; \
         cd ~; \
         rm -r redis_cluster; mkdir -p redis_cluster; \
         mv redis_7.0.5_64 redis_cluster/bin; \
@@ -49,4 +48,4 @@ while :;do
 done
 echo "Redis instances: ${instances}"
 echo "Now create redis_cluster"
-${workdir}/redis_7.0.5_64/redis-cli --cluster create ${instances}
+${workdir}/redis_7.0.5_64/redis-cli --cluster create ${instances} --cluster-replicas 1
