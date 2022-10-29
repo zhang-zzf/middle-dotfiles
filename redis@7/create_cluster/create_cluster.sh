@@ -87,13 +87,13 @@ _batch() {
   addresses=(${1//,/ })
   redisStartPort=${2}
   redisInstancePerNode=${3}
-  replicas=${4:-1}
+  replicas=${4:-0}
   instances=""
   for nodeAddress in ${addresses[@]}; do
     _create_node ${nodeAddress} ${redisStartPort} ${redisInstancePerNode}
   done
   echo "Redis instances: ${instances}"
-  ${workdir}/redis_7.0.5_64/redis-cli --cluster create ${instances} --cluster-replicas 1
+  ${workdir}/redis_7.0.5_64/redis-cli --cluster create ${instances} --cluster-replicas ${replicas}
 }
 
 case "$1" in
